@@ -48,16 +48,16 @@ public class Shipment {
     public Shipment(ShipmentDTO shipmentDTO, Address origin, Address destination) {
         this.origin = origin;
         this.destination = destination;
-        this.sendDate = shipmentDTO.sendDate();
-        this.estimatedDeliveryDate = shipmentDTO.estimatedDeliveryDate();
-        this.type = shipmentDTO.type();
-        this.weight = shipmentDTO.weight();
-        this.length = shipmentDTO.length();
-        this.width = shipmentDTO.width();
-        this.height = shipmentDTO.height();
-        this.cubage = shipmentDTO.cubage();
-        this.declaredValue = shipmentDTO.declaredValue();
-        this.transportationType = shipmentDTO.transportationType();
+        this.sendDate = shipmentDTO.getSendDate();
+        this.estimatedDeliveryDate = shipmentDTO.getEstimatedDeliveryDate();
+        this.type = shipmentDTO.getType();
+        this.weight = shipmentDTO.getWeight();
+        this.length = shipmentDTO.getLength();
+        this.width = shipmentDTO.getWidth();
+        this.height = shipmentDTO.getHeight();
+        this.cubage = shipmentDTO.getCubage();
+        this.declaredValue = shipmentDTO.getDeclaredValue();
+        this.transportationType = shipmentDTO.getTransportationType();
         this.trackingCode = buildTrackingCode();
     }
 
