@@ -12,24 +12,24 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ShipmentDTO {
-    
-    String customer_id;
-    String sendDate;
-    String estimatedDeliveryDate;
-    String type;
-    Double weight;
-    Double length;
-    Double width;
-    Double height;
-    Double cubage;
-    String declaredValue;
-    String transportationType;
-    String trackingCode;
-    AddressDTO origin;
-    AddressDTO destination;
+
+    private String customer_id;
+    private String sendDate;
+    private String estimatedDeliveryDate;
+    private String type;
+    private Double weight;
+    private Double length;
+    private Double width;
+    private Double height;
+    private Double cubage;
+    private String declaredValue;
+    private String transportationType;
+    private String trackingCode;
+    private AddressDTO origin;
+    private AddressDTO destination;
 
     public ShipmentDTO(Shipment shipment) {
-        this.customer_id = shipment.getCustomer();
+        this.customer_id = shipment.getCustomer().getId();
         this.sendDate = shipment.getSendDate();
         this.estimatedDeliveryDate = shipment.getEstimatedDeliveryDate();
         this.type = shipment.getType();

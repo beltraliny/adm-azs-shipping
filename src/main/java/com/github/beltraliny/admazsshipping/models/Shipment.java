@@ -23,7 +23,9 @@ public class Shipment {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    private String customer;
+    @OneToOne
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
 
     @OneToOne
     @JoinColumn(name = "origin_id")
@@ -45,9 +47,7 @@ public class Shipment {
     private String transportationType;
     private String trackingCode;
 
-    public Shipment(ShipmentDTO shipmentDTO, Address origin, Address destination) {
-        this.origin = origin;
-        this.destination = destination;
+    public Shipment(ShipmentDTO shipmentDTO) {
         this.sendDate = shipmentDTO.getSendDate();
         this.estimatedDeliveryDate = shipmentDTO.getEstimatedDeliveryDate();
         this.type = shipmentDTO.getType();
