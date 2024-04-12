@@ -3,6 +3,7 @@ package com.github.beltraliny.admazsshipping.controllers;
 import com.github.beltraliny.admazsshipping.dtos.ShipmentDTO;
 import com.github.beltraliny.admazsshipping.models.Shipment;
 import com.github.beltraliny.admazsshipping.services.ShipmentService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,10 +11,10 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/shipments")
 public class ShipmentController {
 
-    @Autowired
     ShipmentService shipmentService;
 
     @PostMapping
