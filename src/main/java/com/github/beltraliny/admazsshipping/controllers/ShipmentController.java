@@ -4,18 +4,18 @@ import com.github.beltraliny.admazsshipping.dtos.ShipmentDTO;
 import com.github.beltraliny.admazsshipping.models.Shipment;
 import com.github.beltraliny.admazsshipping.services.ShipmentService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/shipments")
 public class ShipmentController {
 
-    ShipmentService shipmentService;
+    private final ShipmentService shipmentService;
 
     @PostMapping
     public ResponseEntity<Shipment> create(@RequestBody ShipmentDTO shipmentDTO) {
@@ -24,8 +24,10 @@ public class ShipmentController {
     }
 
     @GetMapping
-    public ResponseEntity<Void> findAll() {
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<List<ShipmentDTO>> findAll(@RequestBody ShipmentDTO shipmentDTO) {
+        List<Shipment> shipmentList = this.shipmentService.findAll(shipmentDTO);
+        List<ShipmentDTO> shipmentDTOList = shipmentList.stream().map(shipment -> new ShipmentDTO(shipment)).toList();
+        return ResponseEntity.ok(shipmentDTOList);
     }
 
     @GetMapping("/{trackingCode}")

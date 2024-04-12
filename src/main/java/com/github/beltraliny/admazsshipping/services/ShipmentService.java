@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -34,6 +36,13 @@ public class ShipmentService {
         shipment.setDestination(destinationAddress);
 
         return this.shipmentRepository.save(shipment);
+    }
+
+    public List<Shipment> findAll(ShipmentDTO shipmentDTO) {
+        Customer customer = this.customerRepository.findById(shipmentDTO.getCustomerId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));
+        List<Shipment> shipmentList = this.shipmentRepository.findByCustomer(customer);
+        return shipmentList;
     }
 
     public Shipment findByTrackingCode(String trackingCode) {
