@@ -1,5 +1,6 @@
 package com.github.beltraliny.admazsshipping.repositories;
 
+import com.github.beltraliny.admazsshipping.models.Customer;
 import com.github.beltraliny.admazsshipping.models.Shipment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,4 +14,6 @@ public interface ShipmentRepository extends JpaRepository<Shipment, String>, Jpa
     Optional<Shipment> findByTrackingCode(String trackingCode);
 
     Page<Shipment> findAll(Specification<Shipment> specification, Pageable pageable);
+
+    Optional<Shipment> findByCustomerAndId(Customer customer, String id);
 }

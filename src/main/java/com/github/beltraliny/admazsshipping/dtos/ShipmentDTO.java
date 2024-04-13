@@ -13,6 +13,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ShipmentDTO {
 
+    private String id;
     private String customerId;
     private String sendDate;
     private String estimatedDeliveryDate;
@@ -29,6 +30,7 @@ public class ShipmentDTO {
     private AddressDTO destination;
 
     public ShipmentDTO(Shipment shipment) {
+        this.id = shipment.getId();
         this.customerId = shipment.getCustomer().getId();
         this.sendDate = shipment.getSendDate();
         this.estimatedDeliveryDate = shipment.getEstimatedDeliveryDate();

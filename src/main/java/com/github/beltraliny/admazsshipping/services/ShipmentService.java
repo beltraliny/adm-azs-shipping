@@ -59,11 +59,39 @@ public class ShipmentService {
         return shipment;
     }
 
+    public Shipment update(String id, ShipmentDTO shipmentDTO) {
+        Customer customer = this.customerRepository.findById(shipmentDTO.getCustomerId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));
+
+        Shipment shipmentToBeUpdated = updateShipmentIfNecessary(customer, shipmentDTO, id);
+        return this.shipmentRepository.save(shipmentToBeUpdated);
+    }
+
     public void delete(String id) {
         Shipment shipment = this.shipmentRepository.findById(id).get();
         if (shipment == null) return;
 
         this.addressService.deleteByShipment(shipment);
         this.shipmentRepository.deleteById(id);
+    }
+
+    private Shipment updateShipmentIfNecessary(Customer customer, ShipmentDTO shipmentDTO, String id) {
+        Shipment shipment = this.shipmentRepository.findByCustomerAndId(customer, id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        this.addressService.updateAddressIfNecessary(shipment.getOrigin().getId(), shipmentDTO.getOrigin());
+        this.addressService.updateAddressIfNecessary(shipment.getDestination().getId(), shipmentDTO.getOrigin());
+
+        if (shipmentDTO.getSendDate() != null) shipment.setSendDate(shipmentDTO.getSendDate());
+        if (shipmentDTO.getEstimatedDeliveryDate() != null) shipment.setEstimatedDeliveryDate(shipmentDTO.getEstimatedDeliveryDate());
+        if (shipmentDTO.getType() != null) shipment.setType(shipmentDTO.getType());
+        if (shipmentDTO.getWeight() != null) shipment.setWeight(shipmentDTO.getWeight());
+        if (shipmentDTO.getLength() != null) shipment.setLength(shipmentDTO.getLength());
+        if (shipmentDTO.getWidth() != null) shipment.setWidth(shipmentDTO.getWidth());
+        if (shipmentDTO.getHeight() != null) shipment.setHeight(shipmentDTO.getHeight());
+        if (shipmentDTO.getDeclaredValue() != null) shipment.setDeclaredValue(shipmentDTO.getDeclaredValue());
+        if (shipmentDTO.getTransportationType() != null) shipment.setTransportationType(shipmentDTO.getTransportationType());
+
+        return shipment;
     }
 }

@@ -38,8 +38,9 @@ public class ShipmentController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable String id) {
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<ShipmentDTO> update(@PathVariable String id, @RequestBody ShipmentDTO shipmentDTO) {
+        Shipment shipment = shipmentService.update(id, shipmentDTO);
+        return ResponseEntity.ok(new ShipmentDTO(shipment));
     }
 
     @DeleteMapping("/{id}")
