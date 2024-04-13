@@ -1,6 +1,7 @@
 package com.github.beltraliny.admazsshipping.controllers;
 
 import com.github.beltraliny.admazsshipping.dtos.ShipmentDTO;
+import com.github.beltraliny.admazsshipping.dtos.ShipmentSearchRequestDTO;
 import com.github.beltraliny.admazsshipping.models.Shipment;
 import com.github.beltraliny.admazsshipping.services.ShipmentService;
 import lombok.RequiredArgsConstructor;
@@ -24,8 +25,8 @@ public class ShipmentController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ShipmentDTO>> findAll(@RequestBody ShipmentDTO shipmentDTO) {
-        List<Shipment> shipmentList = this.shipmentService.findAll(shipmentDTO);
+    public ResponseEntity<List<ShipmentDTO>> findAll(@RequestBody ShipmentSearchRequestDTO shipmentSearchRequestDTO) {
+        List<Shipment> shipmentList = this.shipmentService.findAll(shipmentSearchRequestDTO);
         List<ShipmentDTO> shipmentDTOList = shipmentList.stream().map(shipment -> new ShipmentDTO(shipment)).toList();
         return ResponseEntity.ok(shipmentDTOList);
     }

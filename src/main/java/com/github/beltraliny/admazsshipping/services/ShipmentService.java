@@ -1,13 +1,18 @@
 package com.github.beltraliny.admazsshipping.services;
 
 import com.github.beltraliny.admazsshipping.dtos.ShipmentDTO;
+import com.github.beltraliny.admazsshipping.dtos.ShipmentSearchRequestDTO;
 import com.github.beltraliny.admazsshipping.models.Address;
 import com.github.beltraliny.admazsshipping.models.Customer;
 import com.github.beltraliny.admazsshipping.models.Shipment;
 import com.github.beltraliny.admazsshipping.repositories.CustomerRepository;
 import com.github.beltraliny.admazsshipping.repositories.ShipmentRepository;
+import com.github.beltraliny.admazsshipping.repositories.ShipmentSpecification;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -38,11 +43,13 @@ public class ShipmentService {
         return this.shipmentRepository.save(shipment);
     }
 
-    public List<Shipment> findAll(ShipmentDTO shipmentDTO) {
-        Customer customer = this.customerRepository.findById(shipmentDTO.getCustomerId())
+    public List<Shipment> findAll(ShipmentSearchRequestDTO shipmentSearchRequestDTO) {
+        Customer customer = this.customerRepository.findById(shipmentSearchRequestDTO.customerId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));
-        List<Shipment> shipmentList = this.shipmentRepository.findByCustomer(customer);
-        return shipmentList;
+
+        Pageable pageable = PageRequest.of(shipmentSearchRequestDTO.page(), shipmentSearchRequestDTO.size());
+        Specification<Shipment> specification = ShipmentSpecification.findAllBySearchParamAndCustomer(customer, shipmentSearchRequestDTO.searchParam());
+        return shipmentRepository.findAll(specification, pageable).getContent();
     }
 
     public Shipment findByTrackingCode(String trackingCode) {
