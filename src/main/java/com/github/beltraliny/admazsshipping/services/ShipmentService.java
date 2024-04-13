@@ -10,6 +10,7 @@ import com.github.beltraliny.admazsshipping.repositories.ShipmentRepository;
 import com.github.beltraliny.admazsshipping.repositories.ShipmentSpecification;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.User;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -56,5 +57,13 @@ public class ShipmentService {
         Shipment shipment = this.shipmentRepository.findByTrackingCode(trackingCode)
                 .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
         return shipment;
+    }
+
+    public void delete(String id) {
+        Shipment shipment = this.shipmentRepository.findById(id).get();
+        if (shipment == null) return;
+
+        this.addressService.deleteByShipment(shipment);
+        this.shipmentRepository.deleteById(id);
     }
 }
