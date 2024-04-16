@@ -21,6 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.UUID;
 
@@ -46,7 +47,7 @@ public class ShipmentService {
         shipment.setDestination(destinationAddress);
 
         shipment.setTrackingCode(buildTrackingCode());
-        shipment.setCubage(calculateCubage(shipmentDTO));
+        shipment.calculateCubage();
 
         validateBeforeSave(shipment);
 
@@ -96,19 +97,36 @@ public class ShipmentService {
         this.addressService.updateAddressIfNecessary(shipment.getOrigin(), shipmentDTO.getOrigin());
         this.addressService.updateAddressIfNecessary(shipment.getDestination(), shipmentDTO.getOrigin());
 
-        if (shipmentDTO.getSendDate() != null) shipment.setSendDate(shipmentDTO.getSendDate());
-        if (shipmentDTO.getEstimatedDeliveryDate() != null) shipment.setEstimatedDeliveryDate(shipmentDTO.getEstimatedDeliveryDate());
-        if (shipmentDTO.getWeight() != null) shipment.setWeight(shipmentDTO.getWeight());
-        if (shipmentDTO.getLength() != null) shipment.setLength(shipmentDTO.getLength());
-        if (shipmentDTO.getWidth() != null) shipment.setWidth(shipmentDTO.getWidth());
-        if (shipmentDTO.getHeight() != null) shipment.setHeight(shipmentDTO.getHeight());
-        if (shipmentDTO.getDeclaredValue() != null) shipment.setDeclaredValue(shipmentDTO.getDeclaredValue());
+        String[] updatableFields = { "sendDate", "estimatedDeliveryDate", "weight", "length",
+                "width", "height", "declaredValue" };
+
+        for (String fieldName : updatableFields) {
+            try {
+                /*
+                    Da lista dos atributos que podem ser atualizados, vamos verificar quais não
+                    estão nulos em ShipmentDTO e atribuí-los a Shipment.
+                 */
+                Field field = shipmentDTO.getClass().getDeclaredField(fieldName);
+                field.setAccessible(true);
+                var value = field.get(shipmentDTO);
+
+                if (value != null && !value.toString().trim().isEmpty()) {
+                    Field shipmentField = shipment.getClass().getDeclaredField(fieldName);
+                    shipmentField.setAccessible(true);
+                    shipmentField.set(shipment, value);
+                }
+            } catch (NoSuchFieldException | IllegalAccessException exception) {
+                throw new ValidationException();
+            }
+        }
 
         CargoType cargoType = CargoType.convert(shipmentDTO.getType());
         if (cargoType != null) shipment.setType(cargoType);
 
         TransportationType transportationType = TransportationType.convert(shipmentDTO.getTransportationType());
         if (transportationType != null) shipment.setTransportationType(transportationType);
+
+        shipment.calculateCubage();
 
         return shipment;
     }
@@ -120,15 +138,6 @@ public class ShipmentService {
         if (existsShipment) return buildTrackingCode();
 
         return trackingCode;
-    }
-
-    private Double calculateCubage(ShipmentDTO shipmentDTO) {
-        if (shipmentDTO.getLength() == null) return null;
-        if (shipmentDTO.getWidth() == null) return null;
-        if (shipmentDTO.getHeight() == null) return null;
-
-        double cubage = shipmentDTO.getLength() * shipmentDTO.getWidth() * shipmentDTO.getHeight() * Shipment.DEFAULT_CUBAGE_FACTOR;
-        return Math.round(cubage * 100.0) / 100.0;
     }
 
     private void validateBeforeSave(Shipment shipment) {

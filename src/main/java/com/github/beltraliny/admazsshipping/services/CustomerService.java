@@ -69,7 +69,7 @@ public class CustomerService {
             }
         }
 
-        return this.customerRepository.save(customer);
+        return customer;
     }
 
     public void delete(String id) {

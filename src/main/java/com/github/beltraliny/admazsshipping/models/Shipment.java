@@ -59,4 +59,13 @@ public class Shipment {
         this.declaredValue = shipmentDTO.getDeclaredValue();
         this.transportationType = TransportationType.convert(shipmentDTO.getTransportationType());
     }
+
+    public void calculateCubage() {
+        if (this.getLength() == null) return;
+        if (this.getWidth() == null) return;
+        if (this.getHeight() == null) return;
+
+        double cubage = this.getLength() * this.getWidth() * this.getHeight() * DEFAULT_CUBAGE_FACTOR;
+        this.setCubage(Math.round(cubage * 100.0) / 100.0);
+    }
 }
