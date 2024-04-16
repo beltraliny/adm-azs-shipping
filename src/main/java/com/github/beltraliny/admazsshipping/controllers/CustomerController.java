@@ -27,4 +27,16 @@ public class CustomerController {
         Customer customer = customerService.findById(id);
         return ResponseEntity.ok(new CustomerDTO(customer));
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<CustomerDTO> update(@PathVariable String id, @RequestBody CustomerDTO customerDTO) {
+        Customer customer = this.customerService.update(id, customerDTO);
+        return ResponseEntity.ok(new CustomerDTO(customer));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable String id) {
+        this.customerService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 }

@@ -10,7 +10,6 @@ import com.github.beltraliny.admazsshipping.repositories.ShipmentRepository;
 import com.github.beltraliny.admazsshipping.repositories.ShipmentSpecification;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.User;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -71,7 +70,9 @@ public class ShipmentService {
         Shipment shipment = this.shipmentRepository.findById(id).get();
         if (shipment == null) return;
 
-        this.addressService.deleteByShipment(shipment);
+        this.addressService.delete(shipment.getOrigin().getId());
+        this.addressService.delete(shipment.getDestination().getId());
+
         this.shipmentRepository.deleteById(id);
     }
 
@@ -79,8 +80,8 @@ public class ShipmentService {
         Shipment shipment = this.shipmentRepository.findByCustomerAndId(customer, id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        this.addressService.updateAddressIfNecessary(shipment.getOrigin().getId(), shipmentDTO.getOrigin());
-        this.addressService.updateAddressIfNecessary(shipment.getDestination().getId(), shipmentDTO.getOrigin());
+        this.addressService.updateAddressIfNecessary(shipment.getOrigin(), shipmentDTO.getOrigin());
+        this.addressService.updateAddressIfNecessary(shipment.getDestination(), shipmentDTO.getOrigin());
 
         if (shipmentDTO.getSendDate() != null) shipment.setSendDate(shipmentDTO.getSendDate());
         if (shipmentDTO.getEstimatedDeliveryDate() != null) shipment.setEstimatedDeliveryDate(shipmentDTO.getEstimatedDeliveryDate());

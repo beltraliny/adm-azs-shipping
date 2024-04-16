@@ -22,15 +22,7 @@ public class AddressService {
         return this.addressRepository.save(address);
     }
 
-    public void deleteByShipment(Shipment shipment) {
-        this.addressRepository.deleteById(shipment.getOrigin().getId());
-        this.addressRepository.deleteById(shipment.getDestination().getId());
-    }
-
-    public void updateAddressIfNecessary(String id, AddressDTO addressDTO) {
-        Address address = this.addressRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-
+    public Address updateAddressIfNecessary(Address address, AddressDTO addressDTO) {
         if (addressDTO.street() != null) address.setStreet(addressDTO.street());
         if (addressDTO.number() != null) address.setNumber(addressDTO.number());
         if (addressDTO.neighborhood() != null) address.setNeighborhood(addressDTO.neighborhood());
@@ -40,6 +32,10 @@ public class AddressService {
         if (addressDTO.complement() != null) address.setComplement(addressDTO.complement());
         if (addressDTO.postalCode() != null) address.setPostalCode(addressDTO.postalCode());
 
-        this.addressRepository.save(address);
+        return this.addressRepository.save(address);
+    }
+
+    public void delete(String id) {
+        this.addressRepository.deleteById(id);
     }
 }

@@ -30,4 +30,30 @@ public class CustomerService {
         return customerRepository.findById(id)
                 .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
+
+    public Customer update(String id, CustomerDTO customerDTO) {
+        Customer customer = updateCustomerIfNecessary(id, customerDTO);
+        return this.customerRepository.save(customer);
+    }
+
+    private Customer updateCustomerIfNecessary(String id, CustomerDTO customerDTO) {
+        Customer customer = this.customerRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        this.addressService.updateAddressIfNecessary(customer.getAddress(), customerDTO.getAddress());
+
+        if (customerDTO.getName() != null) customer.setName(customerDTO.getName());
+        if (customerDTO.getPhoneNumber() != null) customer.setPhoneNumber(customerDTO.getPhoneNumber());
+        if (customerDTO.getEmail() != null) customer.setEmail(customerDTO.getEmail());
+
+        return this.customerRepository.save(customer);
+    }
+
+    public void delete(String id) {
+        Customer customer = this.customerRepository.findById(id).get();
+        if (customer == null) return;
+
+        this.addressService.delete(customer.getAddress().getId());
+        this.customerRepository.deleteById(id);
+    }
 }
