@@ -1,13 +1,12 @@
 package com.github.beltraliny.admazsshipping.models;
 
 import com.github.beltraliny.admazsshipping.dtos.ShipmentDTO;
+import com.github.beltraliny.admazsshipping.enums.TransportationType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.UUID;
 
 @Entity
 @Table(name = "shipment")
@@ -44,7 +43,7 @@ public class Shipment {
     private Double height;
     private Double cubage;
     private String declaredValue;
-    private String transportationType;
+    private TransportationType transportationType;
     private String trackingCode;
 
     public Shipment(ShipmentDTO shipmentDTO) {
@@ -57,6 +56,6 @@ public class Shipment {
         this.height = shipmentDTO.getHeight();
         this.cubage = shipmentDTO.getCubage();
         this.declaredValue = shipmentDTO.getDeclaredValue();
-        this.transportationType = shipmentDTO.getTransportationType();
+        this.transportationType = TransportationType.convert(shipmentDTO.getTransportationType());
     }
 }

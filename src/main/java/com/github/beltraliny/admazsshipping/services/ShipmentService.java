@@ -2,6 +2,7 @@ package com.github.beltraliny.admazsshipping.services;
 
 import com.github.beltraliny.admazsshipping.dtos.ShipmentDTO;
 import com.github.beltraliny.admazsshipping.dtos.ShipmentSearchRequestDTO;
+import com.github.beltraliny.admazsshipping.enums.TransportationType;
 import com.github.beltraliny.admazsshipping.models.Address;
 import com.github.beltraliny.admazsshipping.models.Customer;
 import com.github.beltraliny.admazsshipping.models.Shipment;
@@ -96,7 +97,9 @@ public class ShipmentService {
         if (shipmentDTO.getWidth() != null) shipment.setWidth(shipmentDTO.getWidth());
         if (shipmentDTO.getHeight() != null) shipment.setHeight(shipmentDTO.getHeight());
         if (shipmentDTO.getDeclaredValue() != null) shipment.setDeclaredValue(shipmentDTO.getDeclaredValue());
-        if (shipmentDTO.getTransportationType() != null) shipment.setTransportationType(shipmentDTO.getTransportationType());
+
+        TransportationType transportationType = TransportationType.convert(shipmentDTO.getTransportationType());
+        if (transportationType != null) shipment.setTransportationType(transportationType);
 
         return shipment;
     }
