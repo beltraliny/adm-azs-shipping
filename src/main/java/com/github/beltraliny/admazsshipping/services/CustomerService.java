@@ -15,8 +15,8 @@ import org.springframework.web.server.ResponseStatusException;
 @RequiredArgsConstructor
 public class CustomerService {
 
-    private final CustomerRepository customerRepository;
     private final AddressService addressService;
+    private final CustomerRepository customerRepository;
 
     public Customer create(CustomerDTO customerDTO) {
         Address address = this.addressService.create(customerDTO.getAddress());

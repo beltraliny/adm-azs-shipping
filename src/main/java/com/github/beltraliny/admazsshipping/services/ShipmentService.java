@@ -26,8 +26,8 @@ import java.util.UUID;
 public class ShipmentService {
 
     private final AddressService addressService;
-    private final ShipmentRepository shipmentRepository;
     private final CustomerRepository customerRepository;
+    private final ShipmentRepository shipmentRepository;
 
     public Shipment create(ShipmentDTO shipmentDTO) {
         Customer customer = this.customerRepository.findById(shipmentDTO.getCustomerId())
