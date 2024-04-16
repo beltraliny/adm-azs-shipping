@@ -1,10 +1,11 @@
 package com.github.beltraliny.admazsshipping.services;
 
 import com.github.beltraliny.admazsshipping.dtos.CustomerDTO;
-import com.github.beltraliny.admazsshipping.exceptions.CustomerValidationException;
+import com.github.beltraliny.admazsshipping.exceptions.ValidationException;
 import com.github.beltraliny.admazsshipping.models.Address;
 import com.github.beltraliny.admazsshipping.models.Customer;
 import com.github.beltraliny.admazsshipping.repositories.CustomerRepository;
+import com.github.beltraliny.admazsshipping.utils.ValidationUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -64,7 +65,7 @@ public class CustomerService {
                     customerField.set(customer, value);
                 }
             } catch (NoSuchFieldException | IllegalAccessException exception) {
-                throw new CustomerValidationException();
+                throw new ValidationException();
             }
         }
 
@@ -80,23 +81,7 @@ public class CustomerService {
     }
 
     private void validateBeforeSave(Customer customer) {
-        String[] fieldsToValidate = { "cpfCnpj", "email" };
-
-        try {
-            for (String fieldName : fieldsToValidate) {
-                // Obtém o atributo da classe.
-                Field field = customer.getClass().getDeclaredField(fieldName);
-
-                // Permite o acesso ao campo mesmo que seja privado
-                field.setAccessible(true);
-                var value = field.get(customer);
-
-                if (value == null || value.toString().trim().isEmpty()) {
-                    throw new CustomerValidationException(fieldName + " cannot be null or empty.");
-                }
-            }
-        } catch (NoSuchFieldException | IllegalAccessException exception) {
-            throw new CustomerValidationException();
-        }
+        String[] fieldsToValidate = {"cpfCnpj", "email"};
+        ValidationUtils.validateEntityBeforeSave(customer, fieldsToValidate);
     }
 }

@@ -1,9 +1,10 @@
 package com.github.beltraliny.admazsshipping.services;
 
 import com.github.beltraliny.admazsshipping.dtos.AddressDTO;
-import com.github.beltraliny.admazsshipping.exceptions.AddressValidationException;
+import com.github.beltraliny.admazsshipping.exceptions.ValidationException;
 import com.github.beltraliny.admazsshipping.models.Address;
 import com.github.beltraliny.admazsshipping.repositories.AddressRepository;
+import com.github.beltraliny.admazsshipping.utils.ValidationUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -40,7 +41,7 @@ public class AddressService {
                     addressField.set(address, value);
                 }
             } catch (NoSuchFieldException | IllegalAccessException exception) {
-                throw new AddressValidationException();
+                throw new ValidationException();
             }
         }
 
@@ -52,24 +53,7 @@ public class AddressService {
     }
 
     private void validateBeforeSave(Address address) {
-        String[] fieldsToValidate = { "street", "number", "neighborhood",
-                "city", "state", "country", "postalCode" };
-
-        try {
-            for (String fieldName : fieldsToValidate) {
-                // Obtém o atributo da classe.
-                Field field = address.getClass().getDeclaredField(fieldName);
-
-                // Permite o acesso ao campo mesmo que seja privado
-                field.setAccessible(true);
-                var value = field.get(address);
-
-                if (value == null || value.toString().trim().isEmpty()) {
-                    throw new AddressValidationException(fieldName + " cannot be null or empty.");
-                }
-            }
-        } catch (NoSuchFieldException | IllegalAccessException exception) {
-            throw new AddressValidationException();
-        }
+        String[] fieldsToValidate = {"street", "number", "neighborhood", "city", "state", "country", "postalCode"};
+        ValidationUtils.validateEntityBeforeSave(address, fieldsToValidate);
     }
 }
