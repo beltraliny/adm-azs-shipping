@@ -48,7 +48,7 @@ public class CustomerService {
 
         this.addressService.updateAddressIfNecessary(customer.getAddress(), customerDTO.getAddress());
 
-        String[] updatableFields = { "name", "cpfCnpj", "phoneNumber", "email" };
+        String[] updatableFields = { "name", "phoneNumber", "email" };
         for (String fieldName : updatableFields) {
             try {
                 /*

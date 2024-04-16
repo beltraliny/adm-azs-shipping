@@ -4,12 +4,14 @@ import com.github.beltraliny.admazsshipping.dtos.ShipmentDTO;
 import com.github.beltraliny.admazsshipping.dtos.ShipmentSearchRequestDTO;
 import com.github.beltraliny.admazsshipping.enums.CargoType;
 import com.github.beltraliny.admazsshipping.enums.TransportationType;
+import com.github.beltraliny.admazsshipping.exceptions.ValidationException;
 import com.github.beltraliny.admazsshipping.models.Address;
 import com.github.beltraliny.admazsshipping.models.Customer;
 import com.github.beltraliny.admazsshipping.models.Shipment;
 import com.github.beltraliny.admazsshipping.repositories.CustomerRepository;
 import com.github.beltraliny.admazsshipping.repositories.ShipmentRepository;
 import com.github.beltraliny.admazsshipping.repositories.ShipmentSpecification;
+import com.github.beltraliny.admazsshipping.utils.ValidationUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -45,6 +47,8 @@ public class ShipmentService {
 
         shipment.setTrackingCode(buildTrackingCode());
         shipment.setCubage(calculateCubage(shipmentDTO));
+
+        validateBeforeSave(shipment);
 
         return this.shipmentRepository.save(shipment);
     }
@@ -125,5 +129,15 @@ public class ShipmentService {
 
         double cubage = shipmentDTO.getLength() * shipmentDTO.getWidth() * shipmentDTO.getHeight() * Shipment.DEFAULT_CUBAGE_FACTOR;
         return Math.round(cubage * 100.0) / 100.0;
+    }
+
+    private void validateBeforeSave(Shipment shipment) {
+        String[] fieldsToValidate = {"type", "declaredValue", "transportationType"};
+        ValidationUtils.validateEntityBeforeSave(shipment, fieldsToValidate);
+
+        if (shipment.getCubage() == null && shipment.getWeight() == null) {
+            throw new ValidationException("It is mandatory to provide the weight or the information " +
+                    "necessary to calculate the cubage (length, width, height).");
+        }
     }
 }
