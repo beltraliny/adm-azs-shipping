@@ -7,7 +7,9 @@ import org.springframework.data.jpa.domain.Specification;
 public interface ShipmentSpecification extends Specification<Shipment> {
 
     static Specification<Shipment> findAllBySearchParamAndCustomer(Customer customer, String searchParam) {
-        if (searchParam == null || searchParam.isBlank()) return null;
+        if (searchParam == null || searchParam.isBlank()) {
+            return (shipment, query, criteriaBuilder) -> criteriaBuilder.equal(shipment.get("customer"), customer);
+        }
 
         String parsedSearchParam = "%" + searchParam.trim() + "%";
         return (shipment, query, criteriaBuilder) -> criteriaBuilder.and(
