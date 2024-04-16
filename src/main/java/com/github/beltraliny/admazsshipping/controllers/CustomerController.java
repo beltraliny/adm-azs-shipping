@@ -18,13 +18,13 @@ public class CustomerController {
 
     @PostMapping
     public ResponseEntity<Customer> create(@RequestBody CustomerDTO customerDTO) {
-        Customer customer = customerService.create(customerDTO);
+        Customer customer = this.customerService.create(customerDTO);
         return ResponseEntity.created(URI.create("/api/customers/" + customer.getId())).build();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<CustomerDTO> findById(@PathVariable String id) {
-        Customer customer = customerService.findById(id);
+        Customer customer = this.customerService.findById(id);
         return ResponseEntity.ok(new CustomerDTO(customer));
     }
 

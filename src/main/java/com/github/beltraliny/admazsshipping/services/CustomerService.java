@@ -27,7 +27,7 @@ public class CustomerService {
     }
 
     public Customer findById(String id) {
-        return customerRepository.findById(id)
+        return this.customerRepository.findById(id)
                 .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 

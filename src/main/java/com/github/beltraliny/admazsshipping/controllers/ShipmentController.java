@@ -20,7 +20,7 @@ public class ShipmentController {
 
     @PostMapping
     public ResponseEntity<Shipment> create(@RequestBody ShipmentDTO shipmentDTO) {
-        Shipment shipment = shipmentService.create(shipmentDTO);
+        Shipment shipment = this.shipmentService.create(shipmentDTO);
         return ResponseEntity.created(URI.create("/api/shipments/" + shipment.getTrackingCode())).build();
     }
 
@@ -39,7 +39,7 @@ public class ShipmentController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ShipmentDTO> update(@PathVariable String id, @RequestBody ShipmentDTO shipmentDTO) {
-        Shipment shipment = shipmentService.update(id, shipmentDTO);
+        Shipment shipment = this.shipmentService.update(id, shipmentDTO);
         return ResponseEntity.ok(new ShipmentDTO(shipment));
     }
 

@@ -51,7 +51,7 @@ public class ShipmentService {
 
         Pageable pageable = PageRequest.of(shipmentSearchRequestDTO.page(), shipmentSearchRequestDTO.size());
         Specification<Shipment> specification = ShipmentSpecification.findAllBySearchParamAndCustomer(customer, shipmentSearchRequestDTO.searchParam());
-        return shipmentRepository.findAll(specification, pageable).getContent();
+        return this.shipmentRepository.findAll(specification, pageable).getContent();
     }
 
     public Shipment findByTrackingCode(String trackingCode) {

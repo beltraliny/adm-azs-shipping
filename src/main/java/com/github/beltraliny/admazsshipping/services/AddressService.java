@@ -2,13 +2,10 @@ package com.github.beltraliny.admazsshipping.services;
 
 import com.github.beltraliny.admazsshipping.dtos.AddressDTO;
 import com.github.beltraliny.admazsshipping.models.Address;
-import com.github.beltraliny.admazsshipping.models.Shipment;
 import com.github.beltraliny.admazsshipping.repositories.AddressRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @Transactional
