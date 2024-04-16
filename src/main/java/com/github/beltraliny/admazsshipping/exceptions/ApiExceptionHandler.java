@@ -9,6 +9,12 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
+    @ExceptionHandler(CustomerValidationException.class)
+    private ResponseEntity<ApiError> addressExceptionHandler(CustomerValidationException customerValidationException) {
+        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, customerValidationException.getMessage());
+        return ResponseEntity.status(apiError.getHttpStatus()).body(apiError);
+    }
+
     @ExceptionHandler(AddressValidationException.class)
     private ResponseEntity<ApiError> addressExceptionHandler(AddressValidationException addressValidationException) {
         ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, addressValidationException.getMessage());

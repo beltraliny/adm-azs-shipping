@@ -25,6 +25,8 @@ public class AddressService {
     }
 
     public Address updateAddressIfNecessary(Address address, AddressDTO addressDTO) {
+        if (addressDTO == null) return null;
+
         Field[] dtoFieldList = addressDTO.getClass().getDeclaredFields();
 
         for (Field dtoField : dtoFieldList) {
