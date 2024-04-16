@@ -2,6 +2,7 @@ package com.github.beltraliny.admazsshipping.services;
 
 import com.github.beltraliny.admazsshipping.dtos.ShipmentDTO;
 import com.github.beltraliny.admazsshipping.dtos.ShipmentSearchRequestDTO;
+import com.github.beltraliny.admazsshipping.enums.CargoType;
 import com.github.beltraliny.admazsshipping.enums.TransportationType;
 import com.github.beltraliny.admazsshipping.models.Address;
 import com.github.beltraliny.admazsshipping.models.Customer;
@@ -91,12 +92,14 @@ public class ShipmentService {
 
         if (shipmentDTO.getSendDate() != null) shipment.setSendDate(shipmentDTO.getSendDate());
         if (shipmentDTO.getEstimatedDeliveryDate() != null) shipment.setEstimatedDeliveryDate(shipmentDTO.getEstimatedDeliveryDate());
-        if (shipmentDTO.getType() != null) shipment.setType(shipmentDTO.getType());
         if (shipmentDTO.getWeight() != null) shipment.setWeight(shipmentDTO.getWeight());
         if (shipmentDTO.getLength() != null) shipment.setLength(shipmentDTO.getLength());
         if (shipmentDTO.getWidth() != null) shipment.setWidth(shipmentDTO.getWidth());
         if (shipmentDTO.getHeight() != null) shipment.setHeight(shipmentDTO.getHeight());
         if (shipmentDTO.getDeclaredValue() != null) shipment.setDeclaredValue(shipmentDTO.getDeclaredValue());
+
+        CargoType cargoType = CargoType.convert(shipmentDTO.getType());
+        if (cargoType != null) shipment.setType(cargoType);
 
         TransportationType transportationType = TransportationType.convert(shipmentDTO.getTransportationType());
         if (transportationType != null) shipment.setTransportationType(transportationType);
