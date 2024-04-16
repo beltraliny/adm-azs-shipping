@@ -16,4 +16,6 @@ public interface ShipmentRepository extends JpaRepository<Shipment, String>, Jpa
     Page<Shipment> findAll(Specification<Shipment> specification, Pageable pageable);
 
     Optional<Shipment> findByCustomerAndId(Customer customer, String id);
+
+    boolean existsByTrackingCode(String trackingCode);
 }

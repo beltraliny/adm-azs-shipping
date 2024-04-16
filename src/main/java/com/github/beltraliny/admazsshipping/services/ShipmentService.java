@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -39,6 +40,7 @@ public class ShipmentService {
         shipment.setCustomer(customer);
         shipment.setOrigin(originAddress);
         shipment.setDestination(destinationAddress);
+        shipment.setTrackingCode(buildTrackingCode());
 
         return this.shipmentRepository.save(shipment);
     }
@@ -97,5 +99,14 @@ public class ShipmentService {
         if (shipmentDTO.getTransportationType() != null) shipment.setTransportationType(shipmentDTO.getTransportationType());
 
         return shipment;
+    }
+
+    private String buildTrackingCode() {
+        String trackingCode = UUID.randomUUID().toString().replace("-","").substring(0, Shipment.TRACKING_CODE_SIZE).toUpperCase();
+        boolean existsShipment = this.shipmentRepository.existsByTrackingCode(trackingCode);
+
+        if (existsShipment) return buildTrackingCode();
+
+        return trackingCode;
     }
 }

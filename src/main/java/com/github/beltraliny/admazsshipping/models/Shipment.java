@@ -58,10 +58,5 @@ public class Shipment {
         this.cubage = shipmentDTO.getCubage();
         this.declaredValue = shipmentDTO.getDeclaredValue();
         this.transportationType = shipmentDTO.getTransportationType();
-        this.trackingCode = buildTrackingCode();
-    }
-
-    private String buildTrackingCode() {
-        return UUID.randomUUID().toString().replace("-","").substring(0, TRACKING_CODE_SIZE).toUpperCase();
     }
 }
