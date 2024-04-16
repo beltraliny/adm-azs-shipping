@@ -9,6 +9,12 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
+    @ExceptionHandler(AddressValidationException.class)
+    private ResponseEntity<ApiError> addressExceptionHandler(AddressValidationException addressValidationException) {
+        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, addressValidationException.getMessage());
+        return ResponseEntity.status(apiError.getHttpStatus()).body(apiError);
+    }
+
     @ExceptionHandler(Exception.class)
     private ResponseEntity<ApiError> defaultHandler(Exception exception) {
         ApiError apiError = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, "An unknown error occurred.");
