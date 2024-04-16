@@ -33,9 +33,9 @@ ____
 
 ____
 
-###### Exemplos:
+### Exemplos:
 
-###### Cliente
+### Cliente
 
 <details><summary>POST</summary>
     <code>localhost:8080/api/customers</code>
@@ -89,7 +89,7 @@ ____
 </details>
 <br />
 
-###### Frete
+### Frete
 
 
 <details><summary>POST</summary>
