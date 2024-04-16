@@ -17,6 +17,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Shipment {
 
+    public static final int DEFAULT_CUBAGE_FACTOR = 300;
     public static final int TRACKING_CODE_SIZE = 13;
 
     @Id
@@ -55,7 +56,6 @@ public class Shipment {
         this.length = shipmentDTO.getLength();
         this.width = shipmentDTO.getWidth();
         this.height = shipmentDTO.getHeight();
-        this.cubage = shipmentDTO.getCubage();
         this.declaredValue = shipmentDTO.getDeclaredValue();
         this.transportationType = TransportationType.convert(shipmentDTO.getTransportationType());
     }

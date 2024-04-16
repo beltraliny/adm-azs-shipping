@@ -14,4 +14,12 @@ public enum TransportationType {
             return null;
         }
     }
+
+    public static String convertToString(TransportationType transportationType) {
+        try {
+            return transportationType.toString();
+        } catch (Exception exception) {
+            return null;
+        }
+    }
 }

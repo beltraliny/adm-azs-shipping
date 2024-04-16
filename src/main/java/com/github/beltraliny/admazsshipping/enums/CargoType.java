@@ -17,4 +17,12 @@ public enum CargoType {
             return null;
         }
     }
+
+    public static String convetToString(CargoType cargoType) {
+        try {
+            return cargoType.toString();
+        } catch (Exception exception) {
+            return null;
+        }
+    }
 }

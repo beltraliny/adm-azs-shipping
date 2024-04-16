@@ -1,5 +1,7 @@
 package com.github.beltraliny.admazsshipping.dtos;
 
+import com.github.beltraliny.admazsshipping.enums.CargoType;
+import com.github.beltraliny.admazsshipping.enums.TransportationType;
 import com.github.beltraliny.admazsshipping.models.Address;
 import com.github.beltraliny.admazsshipping.models.Shipment;
 import lombok.AllArgsConstructor;
@@ -34,14 +36,14 @@ public class ShipmentDTO {
         this.customerId = shipment.getCustomer().getId();
         this.sendDate = shipment.getSendDate();
         this.estimatedDeliveryDate = shipment.getEstimatedDeliveryDate();
-        this.type = shipment.getType();
+        this.type = CargoType.convetToString(shipment.getType());
         this.weight = shipment.getWeight();
         this.length = shipment.getLength();
         this.width = shipment.getWidth();
         this.height = shipment.getHeight();
         this.cubage = shipment.getCubage();
         this.declaredValue = shipment.getDeclaredValue();
-        this.transportationType = shipment.getTransportationType();
+        this.transportationType = TransportationType.convertToString(shipment.getTransportationType());
         this.trackingCode = shipment.getTrackingCode();
 
 

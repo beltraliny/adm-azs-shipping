@@ -42,7 +42,9 @@ public class ShipmentService {
         shipment.setCustomer(customer);
         shipment.setOrigin(originAddress);
         shipment.setDestination(destinationAddress);
+
         shipment.setTrackingCode(buildTrackingCode());
+        shipment.setCubage(calculateCubage(shipmentDTO));
 
         return this.shipmentRepository.save(shipment);
     }
@@ -114,5 +116,14 @@ public class ShipmentService {
         if (existsShipment) return buildTrackingCode();
 
         return trackingCode;
+    }
+
+    private Double calculateCubage(ShipmentDTO shipmentDTO) {
+        if (shipmentDTO.getLength() == null) return null;
+        if (shipmentDTO.getWidth() == null) return null;
+        if (shipmentDTO.getHeight() == null) return null;
+
+        double cubage = shipmentDTO.getLength() * shipmentDTO.getWidth() * shipmentDTO.getHeight() * Shipment.DEFAULT_CUBAGE_FACTOR;
+        return Math.round(cubage * 100.0) / 100.0;
     }
 }
