@@ -2,7 +2,6 @@ package com.github.beltraliny.admazsshipping.dtos;
 
 import com.github.beltraliny.admazsshipping.enums.CargoType;
 import com.github.beltraliny.admazsshipping.enums.TransportationType;
-import com.github.beltraliny.admazsshipping.models.Address;
 import com.github.beltraliny.admazsshipping.models.Shipment;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -47,20 +46,7 @@ public class ShipmentDTO {
         this.trackingCode = shipment.getTrackingCode();
 
 
-        this.origin = buildAddressData(shipment.getOrigin());
-        this.destination = buildAddressData(shipment.getDestination());
-    }
-
-    private AddressDTO buildAddressData(Address address) {
-        return new AddressDTO(
-                address.getStreet(),
-                address.getNumber(),
-                address.getNeighborhood(),
-                address.getCity(),
-                address.getState(),
-                address.getCountry(),
-                address.getComplement(),
-                address.getPostalCode()
-        );
+        this.origin = new AddressDTO(shipment.getOrigin());
+        this.destination = new AddressDTO(shipment.getDestination());
     }
 }

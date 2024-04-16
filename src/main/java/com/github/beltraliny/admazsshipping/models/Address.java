@@ -29,13 +29,13 @@ public class Address {
     private String postalCode;
 
     public Address(AddressDTO addressDTO) {
-        this.street = addressDTO.street();
-        this.number = addressDTO.number();
-        this.neighborhood = addressDTO.neighborhood();
-        this.city = addressDTO.city();
-        this.state = addressDTO.state();
-        this.country = addressDTO.country();
-        this.complement = addressDTO.complement();
-        this.postalCode = addressDTO.postalCode();
+        this.street = addressDTO.getStreet();
+        this.number = addressDTO.getNumber();
+        this.neighborhood = addressDTO.getNeighborhood();
+        this.city = addressDTO.getCity();
+        this.state = addressDTO.getState();
+        this.country = addressDTO.getCountry();
+        this.complement = addressDTO.getComplement();
+        this.postalCode = addressDTO.getPostalCode();
     }
 }

@@ -25,14 +25,22 @@ public class AddressService {
     }
 
     public Address updateAddressIfNecessary(Address address, AddressDTO addressDTO) {
-        if (addressDTO.street() != null) address.setStreet(addressDTO.street());
-        if (addressDTO.number() != null) address.setNumber(addressDTO.number());
-        if (addressDTO.neighborhood() != null) address.setNeighborhood(addressDTO.neighborhood());
-        if (addressDTO.city() != null) address.setCity(addressDTO.city());
-        if (addressDTO.state() != null) address.setState(addressDTO.state());
-        if (addressDTO.country() != null) address.setCountry(addressDTO.country());
-        if (addressDTO.complement() != null) address.setComplement(addressDTO.complement());
-        if (addressDTO.postalCode() != null) address.setPostalCode(addressDTO.postalCode());
+        Field[] dtoFieldList = addressDTO.getClass().getDeclaredFields();
+
+        for (Field dtoField : dtoFieldList) {
+            try {
+                //Vamos verificar cada atributo de AddressDTO e caso não seja nulo, vamos setar em Address.
+                dtoField.setAccessible(true);
+                var value = dtoField.get(addressDTO);
+                if (value != null && !value.toString().trim().isEmpty()) {
+                    Field addressField = address.getClass().getDeclaredField(dtoField.getName());
+                    addressField.setAccessible(true);
+                    addressField.set(address, value);
+                }
+            } catch (NoSuchFieldException | IllegalAccessException exception) {
+                throw new AddressValidationException();
+            }
+        }
 
         return this.addressRepository.save(address);
     }
