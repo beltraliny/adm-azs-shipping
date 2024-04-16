@@ -47,9 +47,26 @@ public class CustomerService {
 
         this.addressService.updateAddressIfNecessary(customer.getAddress(), customerDTO.getAddress());
 
-        if (customerDTO.getName() != null) customer.setName(customerDTO.getName());
-        if (customerDTO.getPhoneNumber() != null) customer.setPhoneNumber(customerDTO.getPhoneNumber());
-        if (customerDTO.getEmail() != null) customer.setEmail(customerDTO.getEmail());
+        String[] updatableFields = { "name", "cpfCnpj", "phoneNumber", "email" };
+        for (String fieldName : updatableFields) {
+            try {
+                /*
+                    Da lista dos atributos que podem ser atualizados, vamos verificar quais não
+                    estão nulos em CustomerDTO e atribuí-los a Customer.
+                 */
+                Field field = customerDTO.getClass().getDeclaredField(fieldName);
+                field.setAccessible(true);
+                var value = field.get(customerDTO);
+
+                if (value != null && !value.toString().trim().isEmpty()) {
+                    Field customerField = customer.getClass().getDeclaredField(fieldName);
+                    customerField.setAccessible(true);
+                    customerField.set(customer, value);
+                }
+            } catch (NoSuchFieldException | IllegalAccessException exception) {
+                throw new CustomerValidationException();
+            }
+        }
 
         return this.customerRepository.save(customer);
     }
