@@ -44,8 +44,8 @@ public class ShipmentController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable String id) {
-        this.shipmentService.delete(id);
+    public ResponseEntity<Void> delete(@PathVariable String id, @RequestBody ShipmentDTO shipmentDTO) {
+        this.shipmentService.delete(id, shipmentDTO);
         return ResponseEntity.noContent().build();
     }
 }

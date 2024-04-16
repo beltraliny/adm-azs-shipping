@@ -66,8 +66,11 @@ public class ShipmentService {
         return this.shipmentRepository.save(shipmentToBeUpdated);
     }
 
-    public void delete(String id) {
-        Shipment shipment = this.shipmentRepository.findById(id).get();
+    public void delete(String id, ShipmentDTO shipmentDTO) {
+        Customer customer = this.customerRepository.findById(shipmentDTO.getCustomerId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));
+
+        Shipment shipment = this.shipmentRepository.findByCustomerAndId(customer, id).get();
         if (shipment == null) return;
 
         this.addressService.delete(shipment.getOrigin().getId());
